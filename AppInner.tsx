@@ -18,6 +18,7 @@ import userSlice from "./src/slices/user";
 import { useAppDispatch } from "./src/store";
 import orderSlice from "./src/slices/order";
 import Config from "react-native-config";
+import usePermissions from "./src/hooks/usePermissions";
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -42,6 +43,7 @@ function AppInner() {
     // 애를 쓰기 위해서 AppInner로 파일을 구분해줌
     const [socket, disconnect] = useSocket();
 
+    usePermissions();
     useEffect(() => {
       //axios.interceptors.request.use() AccessToken을 꺼내와서 사용할 때
       axios.interceptors.response.use(
