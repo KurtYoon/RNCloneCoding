@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -15,8 +16,9 @@
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
     "@reduxjs/toolkit": "^1.9.0",
-    "axios": "^0.27.2",
+    "axios": "^0.24.0",
     "install": "^0.13.0",
+    "patch-package": "^6.5.0",
     "react": "18.1.0",
     "react-native": "0.70.4",
     "react-native-config": "^1.4.11",

@@ -16,13 +16,14 @@ import {
 } from '@react-navigation/native';
 import {LoggedInParamList} from '../../AppInner';
 import ImagePicker from 'react-native-image-crop-picker';
-import ImageResizer from 'react-native-image-resizer';
+import ImageResizer from 'react-native-image-resizer'; // 서버용량 줄이기
 import axios, {AxiosError} from 'axios';
 import Config from 'react-native-config';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import orderSlice from '../slices/order';
 import {useAppDispatch} from '../store';
+import { Platform } from 'react-native';
 
 function Complete() {
   const dispatch = useAppDispatch();
@@ -39,12 +40,12 @@ function Complete() {
     const orientation = (response.exif as any)?.Orientation;
     console.log('orientation', orientation);
     return ImageResizer.createResizedImage(
-      response.path,
-      600,
-      600,
+      response.path, // 파일의 경로
+      600, // width
+      600, // height
       response.mime.includes('jpeg') ? 'JPEG' : 'PNG',
-      100,
-      0,
+      100, // quality, 용량관련
+      0, // rotation
     ).then(r => {
       console.log(r.uri, r.name);
 
@@ -59,7 +60,7 @@ function Complete() {
   const onTakePhoto = useCallback(() => {
     return ImagePicker.openCamera({
       includeBase64: true, // 미리보기
-      includeExif: true,
+      includeExif: true, // 사진이 어떤 방향이 위인지 판단
       saveToPhotos: true, // 이미지 저장
       cropping: true, // 이미지 조절
     })
@@ -88,8 +89,14 @@ function Complete() {
       return;
     }
     const formData = new FormData();
-    formData.append('image', image);
     formData.append('orderId', orderId);
+    formData.append('image', {
+      name: image.name,
+      type: image.type || 'image/jpeg',
+      uri:
+        Platform.OS === 'android' ? image.uri : image.uri.replace('file://', ''),
+    });
+    console.log(formData.getParts());
     try {
       await axios.post(`${Config.API_URL}/complete`, formData, {
         headers: {
@@ -97,7 +104,7 @@ function Complete() {
         },
       });
       Alert.alert('알림', '완료처리 되었습니다.');
-      navigation.goBack();
+      navigation.goBack(); // 완료처리한 사항에 대해서 뒤로가기
       navigation.navigate('Settings');
       dispatch(orderSlice.actions.rejectOrder(orderId));
     } catch (error) {
@@ -150,7 +157,7 @@ const styles = StyleSheet.create({
   },
   previewImage: {
     height: Dimensions.get('window').height / 3,
-    resizeMode: 'contain',
+    resizeMode: 'contain', // 딱 맞게
   },
   buttonWrapper: {flexDirection: 'row', justifyContent: 'center'},
   button: {
