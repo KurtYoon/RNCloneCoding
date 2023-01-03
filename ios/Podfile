@@ -14,7 +14,7 @@ target 'RNCloneCoding' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-
+    
   # Flags change depending on the env values.
   flags = get_default_flags()
 

@@ -80,7 +80,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         navigation.navigate('SignIn');
     } catch (error) {
         const errorResponse = (error as AxiosError).response;
-        console.error();
+        console.error(errorResponse);
         if (errorResponse) {
           Alert.alert('알림', errorResponse.data.message);
         }
