@@ -23,16 +23,16 @@ type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 function SignIn({navigation}: SignInScreenProps) {
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const emailRef = useRef<TextInput | null>(null);
     const passwordRef = useRef<TextInput | null>(null);
 
     const onChangeEmail = useCallback(text => {
-      setEmail(text);
+      setEmail(text.trim());
     }, []);
     const onChangePassword = useCallback(text => {
-      setPassword(text);
+      setPassword(text.trim());
     }, []);
     const onSubmit = useCallback(async () => {
       if (loading) {
@@ -58,6 +58,7 @@ function SignIn({navigation}: SignInScreenProps) {
             name: response.data.data.name,
             email: response.data.data.email,
             accessToken: response.data.data.accessToken, // 유효기간을 줌
+            refreshToken: response.data.data.refreshToken,
           }),
         );
         await EncryptedStorage.setItem( // 비밀 storage에 저장
@@ -85,11 +86,12 @@ function SignIn({navigation}: SignInScreenProps) {
       <Text style={styles.label}>이메일</Text>
       <TextInput 
       style={styles.textInput}
-      value={email}
-      placeholder="이메일을 입력해주세요" onChangeText = {onChangeEmail}
+      onChangeText = {onChangeEmail}
+      placeholder="이메일을 입력해주세요"
       importantForAutofill="yes"
       autoComplete="email"
       textContentType="emailAddress"
+      value={email}
       keyboardType="email-address"
       returnKeyType="next"
       onSubmitEditing={() => {
@@ -105,7 +107,7 @@ function SignIn({navigation}: SignInScreenProps) {
       <TextInput 
       style={styles.textInput}
       value={password}
-      placeholder="비밀번호를 입력해주세요" onChangeText = {onChangePassword}
+      placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)" onChangeText = {onChangePassword}
       secureTextEntry
       importantForAutofill="yes"
       autoComplete="password"
