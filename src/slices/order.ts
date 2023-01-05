@@ -12,16 +12,21 @@ export interface Order { // 들어오는 정보를 보고 타입을 지정
         longitude: number;
     };
     price: number;
+    image?: string;
+    rider?: string;
+    completeAt?: string;
 }
 
 export interface InitialState { // ts는 빈 배열을 싫어함
     orders: Order[];
     deliveries: Order[];
+    completes: Order[];
 }
 
 const initialState: InitialState = {
     orders: [],
     deliveries: [],
+    completes: [],
 };
 
 const orderSlice = createSlice( {
@@ -50,6 +55,9 @@ const orderSlice = createSlice( {
                 state.deliveries.splice(delivery, 1);
             }
         },
+        setCompletes(state, action) {
+            state.completes = action.payload;
+        }
     },
     extraReducers: builder => {},
 });
