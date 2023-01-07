@@ -9,6 +9,7 @@ import {RootState} from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import orderSlice, { Order } from '../slices/order';
 import FastImage from 'react-native-fast-image';
+import { Platform } from 'react-native';
 
 function Settings() {
   const money = useSelector((state: RootState) => state.user.money);
@@ -16,11 +17,13 @@ function Settings() {
   const completes = useSelector((state: RootState) => state.order.completes);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
+  const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
+
 
   useEffect(() => {
     async function getMoney() {
       const response = await axios.get<{data: {data: number}}>(
-        `${Config.API_URL}/showmethemoney`,
+        `${API_URL}/showmethemoney`,
         {
           headers: {authorization: `Bearer ${accessToken}`},
         },
@@ -33,7 +36,7 @@ function Settings() {
   useEffect(() => {
     async function getCompletes() {
       const response = await axios.get<{data: Order[]}> (
-        `${Config.API_URL}/completes`,
+        `${API_URL}/completes`,
         {
           headers: {authorization: `Bearer ${accessToken}`},
         },
@@ -46,7 +49,7 @@ function Settings() {
   const onLogout = useCallback(async () => {
     try {
       await axios.post(
-        `${Config.API_URL}/logout`,
+        `${API_URL}/logout`,
         {},
         {
           headers: {
@@ -72,7 +75,7 @@ function Settings() {
   const renderItem = useCallback(({item}: {item: Order}) => {
     return (
       <FastImage
-        source={{uri: `${Config.API_URL}/${item.image}`}}
+        source={{uri: `${API_URL}/${item.image}`}}
         resizeMode="cover"
         style={{
           height: Dimensions.get('window').width / 3 - 10,

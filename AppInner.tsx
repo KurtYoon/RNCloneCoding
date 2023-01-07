@@ -22,6 +22,7 @@ import usePermissions from "./src/hooks/usePermissions";
 import SplashScreen from 'react-native-splash-screen';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { Platform } from "react-native";
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -45,6 +46,8 @@ function AppInner() {
     // useSelector은 Provider밖에서 사용하지 못한다.
     // 애를 쓰기 위해서 AppInner로 파일을 구분해줌
     const [socket, disconnect] = useSocket();
+    const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
+
 
     usePermissions();
     useEffect(() => {
@@ -61,7 +64,7 @@ function AppInner() {
               const originalRequest = config;
               const refreshToken = await EncryptedStorage.getItem('resfreshToken');
               const {data} = await axios.post(
-                `${Config.API_URL}/refreshToken`,
+                `${API_URL}/refreshToken`,
                 {},
                 {headers: {authorization: `Bearer ${refreshToken}`}},
               );
@@ -107,7 +110,7 @@ function AppInner() {
             return;
           }
           const response = await axios.post(
-            `${Config.API_URL}/refreshToken`,
+            `${API_URL}/refreshToken`,
             {},
             {
               headers: {

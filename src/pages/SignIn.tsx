@@ -17,6 +17,7 @@ import axios, {AxiosError} from "axios";
 import userSlice from '../slices/user';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Config from 'react-native-config';
+import { Platform } from "react-native";
 
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
@@ -27,6 +28,8 @@ function SignIn({navigation}: SignInScreenProps) {
     const [password, setPassword] = useState('');
     const emailRef = useRef<TextInput | null>(null);
     const passwordRef = useRef<TextInput | null>(null);
+    const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
+
 
     const onChangeEmail = useCallback(text => {
       setEmail(text.trim());
@@ -46,8 +49,8 @@ function SignIn({navigation}: SignInScreenProps) {
       }
       try {
         setLoading(true);
-        console.log(`${Config.API_URL}`);
-        const response = await axios.post(`${Config.API_URL}/login`, {
+        console.log(`${API_URL}`);
+        const response = await axios.post(`${API_URL}/login`, {
           email,
           password,
         });

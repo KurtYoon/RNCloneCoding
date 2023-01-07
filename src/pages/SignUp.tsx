@@ -27,7 +27,7 @@ function SignUp({navigation}: SignUpScreenProps) {
   const passwordRef = useRef<TextInput | null>(null);
 
 //  text.trim() -> space 금지
-
+  const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
   const onChangeEmail = useCallback(text => {
     setEmail(text.trim());
   }, []);
@@ -68,9 +68,9 @@ function SignUp({navigation}: SignUpScreenProps) {
     console.log(email, name, password);
     try {
         setLoading(true); // 요청전에 loading 걸기
-        console.log(Config.API_URL);
+        console.log(API_URL);
       // http 메서드: get, put, patch, post, delete, head, options
-        const response = await axios.post(`${Config.API_URL}/user`, { 
+        const response = await axios.post(`${API_URL}/user`, { 
           email,
           name,
           password,

@@ -33,6 +33,8 @@ function Complete() {
     useState<{uri: string; name: string; type: string}>();
   const [preview, setPreview] = useState<{uri: string}>();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
+
 
   const onResponse = useCallback(async response => {
     console.log(response.width, response.height, response.exif);
@@ -98,7 +100,7 @@ function Complete() {
     });
     console.log(formData.getParts());
     try {
-      await axios.post(`${Config.API_URL}/complete`, formData, {
+      await axios.post(`${API_URL}/complete`, formData, {
         headers: {
           authorization: `Bearer ${accessToken}`,
         },

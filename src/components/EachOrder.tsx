@@ -10,6 +10,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import { LoggedInParamList } from '../../AppInner';
 import NaverMapView, { Marker, Path } from 'react-native-nmap';
 import getDistanceFromLatLonInKm from '../util';
+import { Platform } from 'react-native';
 
 interface Props {
     item: Order;
@@ -25,6 +26,8 @@ function EachOrder({item}: Props) {
     }, []);
     const [loading, setLoading] = useState(false);
     const {start, end} = item;
+    const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
+
 
     const onAccept = useCallback(async () => {
       if (!accessToken) {
@@ -33,7 +36,7 @@ function EachOrder({item}: Props) {
       try {
         setLoading(false);
         await axios.post( // 남이 먼저 수락한 경우 에러가 나도록 처리
-          `${Config.API_URL}/accept`,
+          `${API_URL}/accept`,
           {orderId: item.orderId},
           {headers: {authorization: `Bearer ${accessToken}`}},
         );
