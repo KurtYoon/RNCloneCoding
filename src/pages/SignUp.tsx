@@ -72,7 +72,7 @@ function SignUp({navigation}: SignUpScreenProps) {
       // http 메서드: get, put, patch, post, delete, head, options
         const response = await axios.post(`${Config.API_URL}/user`, { 
           email,
-          name, 
+          name,
           password,
          });
         console.log(response.data);
@@ -80,7 +80,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         navigation.navigate('SignIn');
     } catch (error) {
         const errorResponse = (error as AxiosError).response;
-        console.error(errorResponse);
+        console.error();
         if (errorResponse) {
           Alert.alert('알림', errorResponse.data.message);
         }
