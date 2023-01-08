@@ -34,16 +34,20 @@ function Ing({navigation}: IngScreenProps) {
     );
   }, []);
 
-  if (!deliveries?.[0]) { // 주문 수락한 것이 없을 때
+  if (!deliveries?.[0]) {
+    // 주문 수락한 것이 없을 때
     return (
+      // eslint-disable-next-line react-native/no-inline-styles
       <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
         <Text>주문을 먼저 수락해주세요!</Text>
       </View>
     );
   }
 
-  if (!myPosition || !myPosition.latitude) { // 내 위치를 불러오지 않았을 때
+  if (!myPosition || !myPosition.latitude) {
+    // 내 위치를 불러오지 않았을 때
     return (
+      // eslint-disable-next-line react-native/no-inline-styles
       <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
         <Text>내 위치를 로딩 중입니다. 권한을 허용했는지 확인해주세요.</Text>
       </View>
@@ -60,6 +64,7 @@ function Ing({navigation}: IngScreenProps) {
           height: Dimensions.get('window').height, // 화면 세로
         }}>
         <NaverMapView
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{width: '100%', height: '100%'}}
           center={{
             zoom: 10,

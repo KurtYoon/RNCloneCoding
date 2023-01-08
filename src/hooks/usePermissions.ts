@@ -5,7 +5,8 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 function usePermissions() {
   // 권한 관련
   useEffect(() => {
-    if (Platform.OS === 'android') { // 안드로이드일경우
+    if (Platform.OS === 'android') {
+      // 안드로이드일경우
       check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION) // 위치권한을 얻어옴
         .then(result => {
           console.log('check location', result);

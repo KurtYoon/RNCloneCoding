@@ -1,5 +1,13 @@
 import React, {useCallback, useEffect} from 'react';
-import {Alert, Dimensions, FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import axios, {AxiosError} from 'axios';
 import Config from 'react-native-config';
 import {useAppDispatch} from '../store';
@@ -7,9 +15,9 @@ import userSlice from '../slices/user';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import orderSlice, { Order } from '../slices/order';
+import orderSlice, {Order} from '../slices/order';
 import FastImage from 'react-native-fast-image';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 function Settings() {
   const money = useSelector((state: RootState) => state.user.money);
@@ -17,8 +25,8 @@ function Settings() {
   const completes = useSelector((state: RootState) => state.order.completes);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
-  const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
-
+  const API_URL =
+    Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
 
   useEffect(() => {
     async function getMoney() {
@@ -31,11 +39,11 @@ function Settings() {
       dispatch(userSlice.actions.setMoney(response.data.data)); // 서버로 부터 데이터를 받아올 때 타입을 지정해야 함
     }
     getMoney();
-  }, [dispatch, accessToken]);
+  }, [dispatch, accessToken, API_URL]);
 
   useEffect(() => {
     async function getCompletes() {
-      const response = await axios.get<{data: Order[]}> (
+      const response = await axios.get<{data: Order[]}>(
         `${API_URL}/completes`,
         {
           headers: {authorization: `Bearer ${accessToken}`},
@@ -44,7 +52,7 @@ function Settings() {
       dispatch(orderSlice.actions.setCompletes(response.data.data));
     }
     getCompletes();
-  }, [dispatch, accessToken]);
+  }, [dispatch, accessToken, API_URL]);
 
   const onLogout = useCallback(async () => {
     try {
@@ -70,21 +78,24 @@ function Settings() {
       const errorResponse = (error as AxiosError).response;
       console.error(errorResponse);
     }
-  }, [accessToken, dispatch]);
+  }, [accessToken, dispatch, API_URL]);
 
   const renderItem = useCallback(({item}: {item: Order}) => {
-    return (
-      <FastImage
-        source={{uri: `${API_URL}/${item.image}`}}
-        resizeMode="cover"
-        style={{
-          height: Dimensions.get('window').width / 3 - 10,
-          width: Dimensions.get('window').width / 3- 10,
-          margin: 5,
-        }}
-      />
-    );
-  }, []); // 반복문에 함수가 들어간다면 Component를 따로 빼기
+      return (
+        <FastImage
+          source={{uri: `${API_URL}/${item.image}`}}
+          resizeMode="cover"
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={{
+            height: Dimensions.get('window').width / 3 - 10,
+            width: Dimensions.get('window').width / 3 - 10,
+            margin: 5,
+          }}
+        />
+      );
+    },
+    [API_URL],
+  ); // 반복문에 함수가 들어간다면 Component를 따로 빼기
 
   return (
     <View>

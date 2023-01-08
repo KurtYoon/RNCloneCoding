@@ -23,18 +23,21 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import orderSlice from '../slices/order';
 import {useAppDispatch} from '../store';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 function Complete() {
   const dispatch = useAppDispatch();
   const route = useRoute<RouteProp<LoggedInParamList>>();
   const navigation = useNavigation<NavigationProp<LoggedInParamList>>();
-  const [image, setImage] =
-    useState<{uri: string; name: string; type: string}>();
+  const [image, setImage] = useState<{
+    uri: string;
+    name: string;
+    type: string;
+  }>();
   const [preview, setPreview] = useState<{uri: string}>();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  const API_URL = Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
-
+  const API_URL =
+    Platform.OS === 'ios' ? 'http://localhost:3105' : Config.API_URL;
 
   const onResponse = useCallback(async response => {
     console.log(response.width, response.height, response.exif);
@@ -96,7 +99,9 @@ function Complete() {
       name: image.name,
       type: image.type || 'image/jpeg',
       uri:
-        Platform.OS === 'android' ? image.uri : image.uri.replace('file://', ''),
+        Platform.OS === 'android'
+          ? image.uri
+          : image.uri.replace('file://', ''),
     });
     console.log(formData.getParts());
     try {
@@ -115,7 +120,7 @@ function Complete() {
         Alert.alert('알림', errorResponse.data.message);
       }
     }
-  }, [dispatch, navigation, image, orderId, accessToken]);
+  }, [image, orderId, API_URL, accessToken, navigation, dispatch]);
 
   return (
     <View>

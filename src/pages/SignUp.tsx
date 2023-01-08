@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../AppInner';
-import DismissKeyboardView from "../components/DismissKeyboardView"
-import axios, { AxiosError } from 'axios';
+import DismissKeyboardView from '../components/DismissKeyboardView';
+import axios, {AxiosError} from 'axios';
 import Config from 'react-native-config';
 
 type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
@@ -67,27 +67,27 @@ function SignUp({navigation}: SignUpScreenProps) {
     }
     console.log(email, name, password);
     try {
-        setLoading(true); // 요청전에 loading 걸기
-        console.log(API_URL);
+      setLoading(true); // 요청전에 loading 걸기
+      console.log(API_URL);
       // http 메서드: get, put, patch, post, delete, head, options
-        const response = await axios.post(`${API_URL}/user`, { 
-          email,
-          name,
-          password,
-         });
-        console.log(response.data);
-        Alert.alert('알림', '회원가입 되었습니다.');
-        navigation.navigate('SignIn');
+      const response = await axios.post(`${API_URL}/user`, {
+        email,
+        name,
+        password,
+      });
+      console.log(response.data);
+      Alert.alert('알림', '회원가입 되었습니다.');
+      navigation.navigate('SignIn');
     } catch (error) {
-        const errorResponse = (error as AxiosError).response;
-        console.error();
-        if (errorResponse) {
-          Alert.alert('알림', errorResponse.data.message);
-        }
+      const errorResponse = (error as AxiosError).response;
+      console.error();
+      if (errorResponse) {
+        Alert.alert('알림', errorResponse.data.message);
+      }
     } finally {
-        setLoading(false); // 성공하든 실패하든 같은 코드를 실행할 때는 finally
+      setLoading(false); // 성공하든 실패하든 같은 코드를 실행할 때는 finally
     }
-  }, [loading, email, name, password]);
+  }, [loading, email, name, password, API_URL, navigation]);
 
   const canGoNext = email && name && password;
   return (
@@ -150,12 +150,11 @@ function SignUp({navigation}: SignUpScreenProps) {
           }
           disabled={!canGoNext || loading} // 로딩중일때는 클릭 잠금
           onPress={onSubmit}>
-          {
-            loading ? (
-              <ActivityIndicator color='white'/>
-            ) : (
-              <Text style={styles.loginButtonText}>회원가입</Text>
-            )}
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.loginButtonText}>회원가입</Text>
+          )}
         </Pressable>
       </View>
     </DismissKeyboardView>
