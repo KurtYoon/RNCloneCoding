@@ -30,7 +30,8 @@ function usePermissions() {
           }
         })
         .catch(console.error);
-    } else if (Platform.OS === 'ios') { // ios일 경우
+    } else if (Platform.OS === 'ios') {
+      // ios일 경우
       check(PERMISSIONS.IOS.LOCATION_ALWAYS)
         .then(result => {
           if (result === RESULTS.BLOCKED || result === RESULTS.DENIED) {

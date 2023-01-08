@@ -82,8 +82,8 @@ function EachOrder({item}: Props) {
           ).toFixed(1)}
           km
         </Text>
-        <Text>장충단로</Text>
-        <Text>엘리스빌</Text>
+        <Text>동국대학교</Text>
+        <Text>신공학관</Text>
       </Pressable>
       {detail ? (
         <View>
